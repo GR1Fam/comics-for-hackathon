@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ԱԻ և արվեստ — կոմիքս</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --outer:#e9dcae; --bar:#151515; --barfg:#fbf1cf; --btn:#fbf1cf; --btnfg:#151515;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --outer:#1b1810; --bar:#0c0b07; --barfg:#fbf1cf; --btn:#fbf1cf; --btnfg:#151515; }
+}
+:root[data-theme="dark"]{ --outer:#1b1810; --bar:#0c0b07; --barfg:#fbf1cf; --btn:#fbf1cf; --btnfg:#151515; }
+html{ height:100%; scroll-padding-top:env(safe-area-inset-top,0px); }
+body{
+  margin:0; height:100%; display:flex; flex-direction:column; overflow:hidden;
+  background:var(--outer);
+  font-family:'Noto Sans Armenian','Sylfaen','Arial Unicode MS','Segoe UI',sans-serif;
+  color:#151515;
+}
+#view{ flex:1; min-height:0; position:relative; overflow:auto; -webkit-overflow-scrolling:touch; }
+#spacer{ position:relative; }
+#stage{ position:absolute; width:1280px; height:1024px; transform-origin:0 0; background:#eedfa8; overflow:hidden; }
+.slide{ position:absolute; inset:0; display:none; }
+.slide.on{ display:block; }
+.ttl{
+  position:absolute; left:120px; right:120px; top:66px; text-align:center;
+  font-weight:900; font-size:54px; line-height:1.15; text-transform:uppercase; letter-spacing:1px;
+}
+.ttl.big{ font-size:128px; top:70px; left:60px; right:60px; line-height:1.05; letter-spacing:3px; }
+.sub{ position:absolute; left:140px; right:140px; top:228px; text-align:center; font-weight:700; font-size:31px; line-height:1.3; }
+.ht{
+  position:absolute; width:460px; height:230px; opacity:.5;
+  background-image:radial-gradient(circle,#151515 2.1px,transparent 2.6px); background-size:11px 11px;
+}
+.pn{ position:absolute; }
+.art{ position:absolute; inset:0; border:5px solid #151515; overflow:hidden; box-sizing:border-box; }
+.art svg{ display:block; width:100%; height:100%; }
+.bb{
+  position:absolute; box-sizing:border-box; background:#fbf1cf; border:3px solid #151515;
+  padding:10px 16px; font-weight:700; font-size:17.5px; line-height:1.28; text-align:center;
+  box-shadow:4px 4px 0 #151515; display:flex; align-items:center; justify-content:center; color:#151515;
+}
+.bb.c{ border-radius:28px; }
+.bb.e{ border-radius:50%/50%; padding:16px 26px; }
+.bb svg.tail{ position:absolute; bottom:-33px; overflow:visible; }
+.sh{ position:absolute; box-sizing:border-box; padding:26px 38px; display:flex; align-items:center; justify-content:center;
+  filter:drop-shadow(4px 4px 0 #151515); text-align:center; font-weight:800; font-size:18px; line-height:1.25; color:#151515; }
+.sh i{ position:absolute; inset:0; background:#151515; }
+.sh b{ position:absolute; inset:5px; background:#fbf1cf; }
+.sh span{ position:relative; }
+.bd{
+  position:absolute; width:54px; height:54px; border-radius:50%; background:#c9392c; color:#fbf1cf;
+  border:4px solid #151515; font-weight:900; font-size:28px; display:flex; align-items:center; justify-content:center;
+  box-shadow:3px 3px 0 #151515;
+}
+.nt{ position:absolute; background:#fbf1cf; border:3px solid #151515; box-shadow:4px 4px 0 #151515; padding:10px 14px; border-radius:6px; }
+.nt h4{ margin:0 0 6px; font-size:19px; font-weight:900; background:#ffd45a; display:inline-block; padding:2px 10px; border:2px solid #151515; }
+.nt div{ font-weight:700; font-size:19px; line-height:1.15; margin:7px 0; display:flex; align-items:center; gap:9px; }
+.nt div i{ font-style:normal; width:24px; height:24px; flex:none; border-radius:50%; background:#0fb08d; color:#fff; font-size:14px; font-weight:900; display:flex; align-items:center; justify-content:center; border:2px solid #151515; }
+.pc{ position:absolute; background:#fbf1cf; border:3px dashed #151515; padding:10px 14px; font-weight:700; font-size:17px; line-height:1.3; box-shadow:4px 4px 0 #151515; }
+.pc b{ display:inline-block; background:#ffd45a; border:2px solid #151515; padding:0 8px; margin-right:8px; font-size:14px; font-weight:900; }
+.card{ position:absolute; background:#fbf1cf; border:5px solid #151515; box-shadow:9px 9px 0 #151515; box-sizing:border-box; overflow:hidden; }
+.card .hd{ display:flex; align-items:center; gap:16px; padding:14px 22px; color:#fbf1cf; border-bottom:5px solid #151515; font-weight:900; font-size:28px; }
+.card .hd u{ text-decoration:none; width:50px; height:50px; border-radius:50%; background:#fbf1cf; color:#151515; border:4px solid #151515; display:flex; align-items:center; justify-content:center; font-size:26px; flex:none; }
+.card p{ margin:0; padding:18px 24px; font-weight:600; font-size:22px; line-height:1.42; }
+.step .hd{ border-bottom:0; padding:18px 22px 4px; color:#151515; font-size:27px; }
+.step .hd u{ color:#fbf1cf; width:62px; height:62px; font-size:32px; }
+.step p{ padding:4px 24px 14px 100px; font-size:22px; }
+.speech{ position:absolute; left:100px; top:190px; width:1080px; box-sizing:border-box; background:#fbf1cf; border:5px solid #151515; box-shadow:9px 9px 0 #151515; padding:26px 34px; font-weight:600; font-size:22.5px; line-height:1.55; border-radius:34px; }
+.qa{ position:absolute; top:690px; width:525px; height:240px; box-sizing:border-box; background:#fbf1cf; border:5px solid #151515; box-shadow:9px 9px 0 #151515; overflow:hidden; }
+.qa h5{ margin:0; padding:10px 20px; background:#151515; color:#fbf1cf; font-size:21px; font-weight:800; }
+.qa p{ margin:0; padding:12px 20px; font-weight:600; font-size:19.5px; line-height:1.42; }
+#bar{ flex:none; background:var(--bar); color:var(--barfg); display:flex; align-items:center; justify-content:center; gap:10px; padding:8px 10px; }
+#bar button{ font:inherit; font-weight:800; font-size:17px; min-width:48px; height:42px; padding:0 14px; border-radius:21px; border:0; background:var(--btn); color:var(--btnfg); cursor:pointer; }
+#bar button:focus-visible{ outline:3px solid #ffd45a; outline-offset:2px; }
+#bar button:disabled{ opacity:.35; cursor:default; }
+#cnt{ min-width:70px; text-align:center; font-weight:800; font-size:17px; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="2.3" fill="#151515"/></pattern>
+    <linearGradient id="gL" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>
+    <linearGradient id="gR" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>
+    <mask id="mL" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#gL)"/></mask>
+    <mask id="mR" maskContentUnits="objectBoundingBox"><rect width="1" height="1" fill="url(#gR)"/></mask>
+  </defs>
+</svg>
+
+<div id="view"><div id="spacer"><div id="stage"></div></div></div>
+
+<div id="bar">
+  <button id="prev" aria-label="Նախորդ">◀</button>
+  <div id="cnt">1 / 10</div>
+  <button id="next" aria-label="Հաջորդ">▶</button>
+  <button id="zm" aria-label="Մեծացնել">🔍 ×1</button>
+</div>
+
+<script>
+const INK='#151515', CREAM='#fbf1cf';
+const PAL={ r:['#c9392c','#b9302a'], t:['#d9c88f','#e4d4a2'], g:['#10b08d','#08a082'], l:['#a6e0d5','#94d3c7'] };
+const HEAD={ r:'#c9392c', t:'#d08a1e', g:'#0c8f72', l:'#2a8fa0' };
+
+/* ---------- characters ---------- */
+function person(c,h){
+  const ani=c.k==='ani', s=c.s||.85, cx=c.x;
+  const skin=ani?'#f0a58c':'#f5b9a0', hair=ani?'#a23b36':'#6f2323', sw=ani?'#e49d38':'#0f5a4a';
+  const arm=d=>`<path d="${d}" fill="none" stroke="${INK}" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${sw}" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const hand=(x,y)=>`<circle cx="${x}" cy="${y}" r="9.5" fill="${skin}" stroke="${INK}" stroke-width="2.5"/>`;
+  let a='';
+  switch(c.p){
+    case 'think': a=arm('M-48 -96 Q-56 -40 26 -50')+hand(26,-50)+arm('M48 -98 L56 -58 L12 -126')+hand(10,-130); break;
+    case 'point': a=arm('M-48 -96 Q-56 -52 -14 -60')+hand(-14,-60)+arm('M48 -98 Q84 -86 86 -128')+hand(86,-134); break;
+    case 'cheer': a=arm('M-48 -98 L-86 -152')+hand(-88,-158)+arm('M48 -98 L86 -152')+hand(88,-158); break;
+    default: a=arm('M-48 -96 Q-56 -40 26 -50')+hand(26,-50)+arm('M48 -96 Q56 -36 -26 -46')+hand(-26,-46);
+  }
+  const m=c.m||'smile';
+  const mouth= m==='open' ? `<ellipse cx="0" cy="-145" rx="6" ry="5" fill="#7a1f1f" stroke="${INK}" stroke-width="2"/>`
+             : m==='flat' ? `<path d="M-6 -144 L6 -144" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>`
+             : `<path d="M-8 -146 Q0 -138 8 -146" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>`;
+  const hairBack= ani
+    ? `<path d="M-33 -150 Q-40 -105 -30 -92 L30 -92 Q40 -105 33 -150 Q30 -198 0 -198 Q-30 -198 -33 -150Z" fill="${hair}"/>`
+    : `<path d="M-33 -150 Q-38 -118 -34 -104 L34 -104 Q38 -118 33 -150 Q30 -196 0 -196 Q-30 -196 -33 -150Z" fill="${hair}"/>`;
+  const collar= ani
+    ? `<rect x="-15" y="-142" width="30" height="24" rx="9" fill="${sw}" stroke="${INK}" stroke-width="3"/>`
+    : `<path d="M-17 -124 L0 -98 L17 -124Z" fill="${skin}"/>`;
+  const beret= ani ? `<ellipse cx="6" cy="-192" rx="38" ry="15" fill="#a8344a" stroke="${INK}" stroke-width="2.5"/><rect x="3" y="-212" width="6" height="9" rx="2" fill="#a8344a" stroke="${INK}" stroke-width="2"/>` : '';
+  return `<g transform="translate(${cx},${h}) scale(${s})">
+    ${hairBack}
+    <path d="M-58 0 L-52 -80 Q-50 -118 -18 -124 L18 -124 Q50 -118 52 -80 L58 0Z" fill="${sw}" stroke="${INK}" stroke-width="3"/>
+    <rect x="-9" y="-140" width="18" height="22" fill="${skin}"/>
+    ${collar}
+    <ellipse cx="0" cy="-160" rx="26" ry="30" fill="${skin}"/>
+    <path d="M-28 -165 Q-26 -196 2 -194 Q28 -192 28 -164 Q12 -180 -28 -165Z" fill="${hair}"/>
+    <circle cx="-10" cy="-159" r="2.8" fill="${INK}"/><circle cx="10" cy="-159" r="2.8" fill="${INK}"/>
+    <path d="M-15 -167 L-6 -168 M6 -168 L15 -167" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="-16" cy="-150" r="5" fill="#e8776a" opacity=".45"/><circle cx="16" cy="-150" r="5" fill="#e8776a" opacity=".45"/>
+    ${mouth}
+    ${beret}
+    ${a}
+  </g>`;
+}
+function robot(c,h){
+  const s=c.s||.95, m=c.m||'smile';
+  const mouth= m==='flat' ? `<path d="M-14 -106 L14 -106" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>`
+             : `<path d="M-15 -108 Q0 -98 15 -108" fill="none" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>`;
+  return `<g transform="translate(${c.x},${h}) scale(${s})">
+    <path d="M-44 -70 L-70 -38" stroke="${INK}" stroke-width="9" stroke-linecap="round"/>
+    <path d="M44 -70 L70 -104" stroke="${INK}" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="70" cy="-106" r="8" fill="#d9483b" stroke="${INK}" stroke-width="3"/>
+    <rect x="-46" y="-96" width="92" height="110" rx="14" fill="${CREAM}" stroke="${INK}" stroke-width="4"/>
+    <rect x="-27" y="-78" width="54" height="36" rx="6" fill="#7fd6c6" stroke="${INK}" stroke-width="3"/>
+    <circle cx="-11" cy="-60" r="5" fill="#d9483b"/><rect x="0" y="-65" width="18" height="10" rx="3" fill="${CREAM}" stroke="${INK}" stroke-width="2"/>
+    <line x1="0" y1="-172" x2="0" y2="-150" stroke="${INK}" stroke-width="4"/>
+    <circle cx="0" cy="-176" r="7.5" fill="#d9483b" stroke="${INK}" stroke-width="3"/>
+    <rect x="-42" y="-154" width="84" height="60" rx="17" fill="${CREAM}" stroke="${INK}" stroke-width="4"/>
+    <circle cx="-17" cy="-128" r="12" fill="#7fd6c6" stroke="${INK}" stroke-width="3"/><circle cx="17" cy="-128" r="12" fill="#7fd6c6" stroke="${INK}" stroke-width="3"/>
+    <circle cx="-17" cy="-128" r="4.5" fill="${INK}"/><circle cx="17" cy="-128" r="4.5" fill="${INK}"/>
+    ${mouth}
+  </g>`;
+}
+
+/* ---------- scenes (drawn for a 525x340 panel, ground at y=238) ---------- */
+const GY=238;
+function monitor(a,pic){
+  let inner;
+  if(pic==='bad') inner=`<rect x="118" y="35" width="289" height="159" rx="6" fill="#c4c4c4"/><path d="M135 165 q40-70 75-12 t60 0 t75-34" fill="none" stroke="#9a9a9a" stroke-width="12" stroke-linecap="round"/><text x="262" y="135" text-anchor="middle" font-size="76" font-weight="900" fill="#7a7a7a" font-family="sans-serif">?</text>`;
+  else if(pic==='warn') inner=`<rect x="118" y="35" width="289" height="159" rx="6" fill="#ffd45a"/><polygon points="262,50 340,178 184,178" fill="${INK}"/><text x="262" y="164" text-anchor="middle" font-size="84" font-weight="900" fill="#ffd45a" font-family="sans-serif">!</text>`;
+  else inner=`<rect x="118" y="35" width="289" height="159" rx="6" fill="#8fd3ff"/><circle cx="352" cy="82" r="24" fill="#ffd45a"/><path d="M160 80 q10-16 28-8 q10-14 28 0 q16 4 8 14 h-62z" fill="#fff"/><polygon points="118,194 190,104 250,172 312,118 407,194" fill="#2f9e6d"/><path d="M175 98v10M190 100v10M205 98v10" stroke="#3b7bd9" stroke-width="3"/>`;
+  return `<rect x="105" y="22" width="315" height="185" rx="14" fill="${INK}"/>${inner}<rect x="250" y="207" width="25" height="31" fill="${INK}"/><rect x="205" y="232" width="115" height="12" rx="5" fill="${INK}"/>`;
+}
+const SC={
+  school:a=>`<rect x="70" y="28" width="385" height="174" rx="8" fill="${INK}"/><rect x="60" y="202" width="405" height="9" rx="3" fill="${INK}"/>
+    <g fill="none" stroke="${CREAM}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="125" cy="72" r="16"/><path d="M110 72h-14M140 72h14M125 52v-12M125 92v12"/>
+    <path d="M205 104 Q184 104 190 87 Q196 70 216 76 Q226 54 250 64 Q274 60 274 86 Q290 92 274 104 Z"/>
+    <path d="M220 118v14M244 118v14M266 118v14"/>
+    <path d="M92 176 q16-14 32 0 t32 0 t32 0 t32 0 t32 0 t32 0 t32 0"/>
+    <path d="M318 150 q40-60 98-26"/><path d="M404 112 l12 12 l-18 6"/></g>`,
+  monitor:(a,p)=>monitor(a,p.pic),
+  gallery:a=>`<rect x="58" y="58" width="108" height="128" fill="${INK}"/><rect x="69" y="69" width="86" height="106" fill="#ffd45a"/><circle cx="112" cy="105" r="20" fill="#d9483b"/><path d="M69 175 q43-50 86 0z" fill="#2f9e6d"/>
+    <rect x="205" y="36" width="116" height="148" fill="${INK}"/><rect x="216" y="47" width="94" height="126" fill="#8fd3ff"/><polygon points="216,173 262,92 310,173" fill="#7b4fb8"/><circle cx="288" cy="76" r="12" fill="#fbf1cf"/>
+    <rect x="360" y="66" width="102" height="108" fill="${INK}"/><rect x="371" y="77" width="80" height="86" fill="#f4a3a0"/><path d="M371 130 q20-30 40 0 t40 0" fill="none" stroke="#c9392c" stroke-width="8" stroke-linecap="round"/>`,
+  easel:a=>`<path d="M262 160 L205 300 M262 160 L320 300 M262 160 L262 300" stroke="${INK}" stroke-width="9" stroke-linecap="round"/>
+    <rect x="182" y="34" width="160" height="132" fill="${INK}"/><rect x="192" y="44" width="140" height="112" fill="${CREAM}"/>
+    <circle cx="295" cy="75" r="16" fill="#ffd45a"/><polygon points="192,156 240,92 280,140 306,112 332,156" fill="#2f9e6d"/>
+    <rect x="170" y="166" width="184" height="9" rx="3" fill="${INK}"/>`,
+  city:a=>[[40,120,55],[100,70,62],[172,140,50],[228,50,70],[304,112,56],[366,82,62],[432,134,70]].map(([x,h,w])=>{
+      let win=''; for(let y=GY-h+14;y<GY-14;y+=24) for(let xx=x+10;xx<x+w-12;xx+=22) win+=`<rect x="${xx}" y="${y}" width="9" height="12" fill="${a.bg}" opacity=".75"/>`;
+      return `<rect x="${x}" y="${GY-h}" width="${w}" height="${h}" fill="${INK}"/>${win}`;}).join('')+`<rect x="256" y="${GY-100}" width="4" height="52" fill="${INK}"/>`,
+  phone:a=>`<rect x="188" y="14" width="150" height="262" rx="26" fill="${INK}"/><rect x="199" y="34" width="128" height="222" rx="10" fill="#8fd3ff"/>
+    <circle cx="263" cy="86" r="22" fill="#ffd45a"/><polygon points="199,150 240,104 270,136 296,116 327,150" fill="#2f9e6d"/><rect x="199" y="150" width="128" height="106" fill="#fbf1cf"/>
+    <path d="M222 186 q10-14 20 0 q10-14 20 0 q0 12-20 26 q-20-14-20-26z" fill="#d9483b" transform="translate(5 0)"/>
+    <rect x="215" y="222" width="96" height="7" rx="3" fill="${INK}" opacity=".6"/><rect x="215" y="237" width="66" height="7" rx="3" fill="${INK}" opacity=".6"/>`,
+  house:a=>`<polygon points="150,148 290,40 430,148" fill="${INK}"/><rect x="168" y="146" width="244" height="92" fill="${INK}"/><rect x="340" y="42" width="24" height="48" fill="${INK}"/>
+    <rect x="196" y="168" width="38" height="36" fill="${a.bg}"/><rect x="346" y="168" width="38" height="36" fill="${a.bg}"/>
+    <path d="M440 238 v-70 M440 200 q-22-20 -34-44 M440 190 q20-14 36-40" stroke="${INK}" stroke-width="7" fill="none" stroke-linecap="round"/>`,
+  plain:a=>``,
+  result:a=>`<rect x="176" y="150" width="172" height="120" fill="${INK}"/><rect x="186" y="160" width="152" height="100" fill="#8fd3ff"/><circle cx="305" cy="190" r="16" fill="#ffd45a"/><path d="M196 200 q10-14 26-6 q12-12 26 2 q12 4 4 12 h-56z" fill="#fff"/><polygon points="186,260 230,206 266,244 296,216 338,260" fill="#2f9e6d"/><path d="M205 210v10M220 212v10M235 210v10" stroke="#3b7bd9" stroke-width="3"/>`
+};
+
+function grassPath(w,gy,e){ let d=''; for(let x=0;x<w;x+=7){ if(x>e&&x<w-e) continue; const hh=8+16*Math.abs(Math.sin(x*.9+1)); d+=`M${x} ${gy+2}L${x+3.5} ${gy-hh}L${x+7} ${gy+2}Z`; } return d; }
+
+/* ---------- speech bubbles ---------- */
+function starPoly(n){ const p=[]; for(let i=0;i<2*n;i++){ const a=i*Math.PI/n; const r=(i%2?0.80:1)*(1-0.05*Math.abs(Math.sin(i*2.1))); p.push(`${(50+50*r*Math.cos(a)).toFixed(1)}% ${(50+50*r*Math.sin(a)).toFixed(1)}%`);} return `polygon(${p.join(',')})`; }
+const POLY=starPoly(15);
+function bubble(b){
+  if(b.k==='s') return `<div class="sh" style="left:${b.x}px;top:${b.y}px;width:${b.w}px"><i style="clip-path:${POLY}"></i><b style="clip-path:${POLY}"></b><span>${b.t}</span></div>`;
+  const to=b.to==null? b.x+40 : b.to;
+  let tl,tip;
+  if(b.k==='e'){ tl=b.w/2-30+Math.max(-26,Math.min(26,(to-(b.x+b.w/2))/6)); tip=Math.max(4,Math.min(56,to-b.x-tl)); }
+  else { tl=Math.max(16,Math.min(b.w-76,to-b.x-26)); tip=Math.max(6,Math.min(54,to-b.x-tl)); }
+  return `<div class="bb ${b.k==='e'?'e':'c'}" style="left:${b.x}px;top:${b.y}px;width:${b.w}px">${b.t}
+    <svg class="tail" style="left:${tl}px" width="60" height="36" viewBox="0 0 60 36"><path d="M12 0 L${tip} 34 L46 0" fill="${CREAM}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M15 0H43" stroke="${CREAM}" stroke-width="6"/></svg></div>`;
+}
+const B=(t,x,y,w,to,k)=>({t,x,y,w,to,k});
+
+/* ---------- panel ---------- */
+function panelHTML(p,pos,idx){
+  const w=pos.w,h=pos.h,gy=pos.gy||GY,k=pos.k||1,e=pos.e||70;
+  const [bg,gr]=PAL[p.c]; const a={bg};
+  let svg=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice">`;
+  svg+=`<rect width="${w}" height="${h}" fill="${bg}"/><rect y="${gy}" width="${w}" height="${h-gy}" fill="${gr}"/>`;
+  const right=idx%2===1;
+  svg+=`<rect x="${right?w*.62:0}" y="${gy-70}" width="${w*.38}" height="${h-gy+70}" fill="url(#dots)" mask="url(#${right?'mR':'mL'})" opacity=".3"/>`;
+  svg+=`<g transform="translate(${w/2},${gy}) scale(${k}) translate(-262.5,-${GY})">${(SC[p.sc]||SC.plain)(a,p)}</g>`;
+  svg+=`<path d="${grassPath(w,gy,e)}" fill="${INK}"/>`;
+  (p.ch||[]).forEach(c=>{ svg+= c.k==='robot'? robot(c,h) : person(c,h); });
+  svg+='</svg>';
+  let html=`<div class="pn" style="left:${pos.x}px;top:${pos.y}px;width:${w}px;height:${h}px"><div class="art">${svg}</div>`;
+  (p.b||[]).forEach(b=>html+=bubble(b));
+  (p.x||[]).forEach(x=>html+=x);
+  return html+'</div>';
+}
+const POS=[ {x:100,y:215,w:525,h:340}, {x:655,y:215,w:525,h:340}, {x:100,y:585,w:525,h:335}, {x:655,y:585,w:525,h:335} ];
+
+/* ---------- decoration ---------- */
+function sp(x,y,r,c){ const q=r*.13; return `<path transform="translate(${x},${y})" d="M0 -${r} Q${q} -${q} ${r} 0 Q${q} ${q} 0 ${r} Q-${q} ${q} -${r} 0 Q-${q} -${q} 0 -${r}Z" fill="${c}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`; }
+function deco(n){
+  const f=n%2;
+  return `<div class="ht" style="right:0;top:0;-webkit-mask-image:linear-gradient(to bottom left,#000,transparent 70%);mask-image:linear-gradient(to bottom left,#000,transparent 70%)"></div>
+  <div class="ht" style="left:0;bottom:0;-webkit-mask-image:linear-gradient(to top right,#000,transparent 70%);mask-image:linear-gradient(to top right,#000,transparent 70%)"></div>
+  <div class="ht" style="right:0;bottom:0;opacity:.35;-webkit-mask-image:linear-gradient(to top left,#000,transparent 70%);mask-image:linear-gradient(to top left,#000,transparent 70%)"></div>
+  <svg style="position:absolute;left:0;top:0;pointer-events:none" width="1280" height="1024" viewBox="0 0 1280 1024">
+    ${sp(30,70,24,'#7fd6c6')}${sp(68,100,34,'#c9392c')}${sp(26,138,30,'#0fb08d')}
+    ${sp(1220,f?560:470,32,'#7fd6c6')}${sp(1252,f?590:500,26,'#c9392c')}${sp(1210,f?625:535,32,'#0fb08d')}
+  </svg>`;
+}
+
+/* ---------- slides ---------- */
+const slides=[];
+const C=(k,x,s,p,m)=>({k,x,s,p,m});
+
+/* 1. cover */
+slides.push(()=>{
+  const pos={x:100,y:330,w:1080,h:560,gy:392,k:1.55,e:140};
+  const p={c:'g',sc:'monitor',pic:'sun',ch:[]};
+  let html=`<div class="ttl big">ԱԻ ԵՎ ԱՐՎԵՍՏ</div><div class="sub">Ինչպես ստեղծել կրթական նկարազարդումներ և կոմիքսներ արհեստական բանականությամբ</div>`;
+  const [bg,gr]=PAL.g;
+  let svg=`<svg viewBox="0 0 1080 560" preserveAspectRatio="xMidYMid slice"><rect width="1080" height="560" fill="${bg}"/><rect y="392" width="1080" height="168" fill="${gr}"/>
+    <rect x="0" y="330" width="420" height="230" fill="url(#dots)" mask="url(#mL)" opacity=".3"/>
+    <g transform="translate(540,392) scale(1.55) translate(-262.5,-${GY})">${monitor({bg},'sun')}</g>
+    <path d="${grassPath(1080,392,150)}" fill="${INK}"/>
+    ${person(C('ani',170,1.45,'point','open'),560)}${robot({x:540,s:1.25,m:'smile'},560).replace('translate(540,560)','translate(540,560)')}${person(C('lil',910,1.45,'cheer','open'),560)}</svg>`;
+  html+=`<div class="pn" style="left:${pos.x}px;top:${pos.y}px;width:${pos.w}px;height:${pos.h}px"><div class="art">${svg}</div>`;
+  html+=bubble(B('Եկեք ստեղծենք ԱԻ-ով։',20,-26,360,170,'s'));
+  html+=bubble(B('Մեկ նկարը հազար բառ արժե, իսկ կոմիքսը՝ ավելին։',720,-12,330,910,'c'));
+  html+=`</div><div style="position:absolute;left:0;right:0;top:930px;text-align:center;font-weight:800;font-size:25px">Կոմիքս՝ 6 էջով · Ներկայացնում է՝ [Ձեր անունը]</div>`;
+  return html;
+});
+
+function comic(title,panels){
+  return ()=>`<div class="ttl">${title}</div>`+panels.map((p,i)=>panelHTML(p,POS[i],i)).join('');
+}
+
+/* 2. intro */
+slides.push(comic('Ծանոթացում ԱԻ-ի հետ',[
+ {c:'r',sc:'school',ch:[C('lil',105,.85,'think','flat'),C('ani',420,.85,'cross','flat')],
+  b:[B('Վաղը դաս ունեմ, բայց լավ նկարներ չունեմ…',6,-20,272,105,'s'),B('Փորձիր ԱԻ-ով նկար ստեղծել։',296,-10,222,420)]},
+ {c:'t',sc:'monitor',pic:'sun',ch:[C('lil',70,.78,'think','smile'),C('robot',262,1,0,'smile'),C('ani',455,.78,'cross','open')],
+  b:[B('Ես գեներատիվ ԱԻ եմ՝ տեքստը վերածում եմ պատկերի։',10,-18,262,262),B('Իսկ ինչպե՞ս դա ստացվում է։',294,-12,224,455)]},
+ {c:'g',sc:'gallery',ch:[C('ani',125,.85,'point','open'),C('robot',410,.95,0,'smile')],
+  b:[B('Մոդելը սովորել է միլիոնավոր պատկերներից և գտնում է օրինաչափություններ։',6,-18,306,125),B('Բայց ինձ ղեկավար է պետք։',326,-4,192,410)]},
+ {c:'l',sc:'house',ch:[C('ani',105,.85,'cross','smile'),C('lil',420,.85,'point','smile')],
+  b:[B('ԱԻ-ն արվեստագետին չի փոխարինում, այլ վրձնի պես գործիք է։',8,-18,268,105),B('Ուրեմն գաղափարը իմն է, իսկ ԱԻ-ն օգնում է։',290,-8,230,420)]}
+]));
+
+/* 3. prompt formula */
+slides.push(comic('Լավ հուշումի բանաձևը',[
+ {c:'r',sc:'monitor',pic:'bad',ch:[C('lil',70,.8,'think','flat'),C('robot',455,.85,0,'flat')],
+  b:[B('Գրեցի «ջրի շրջապտույտ», բայց նկարը անորոշ է…',8,-18,282,70),B('Քիչ մանրամասն՝ անորոշ արդյունք։',306,-8,212,455)]},
+ {c:'t',sc:'plain',ch:[C('ani',100,.85,'point','open')],
+  b:[B('Հուշումը կառուցիր 5 մասից։',8,-18,232,100,'e')],
+  x:[`<div class="nt" style="left:262px;top:26px;width:244px"><h4>ԲԱՆԱՁԵՎ</h4><div><i>1</i>Թեմա</div><div><i>2</i>Ոճ</div><div><i>3</i>Տրամադրություն</div><div><i>4</i>Լույս և գույն</div><div><i>5</i>Կոմպոզիցիա</div></div>`]},
+ {c:'g',sc:'result',ch:[C('ani',66,.8,'cross','smile'),C('lil',460,.8,'point','open')],
+  b:[B('Շատ ավելի հստակ է։',346,100,168,460,'e')],
+  x:[`<div class="pc" style="left:20px;top:16px;width:485px"><b>ՕՐԻՆԱԿ</b>«Լեռնային լիճ, անձրև և ամպեր՝ երեխաների դասագրքի ոճով, վառ գույներ, լայն կադր»</div>`]},
+ {c:'l',sc:'easel',ch:[C('ani',100,.82,'point','open'),C('robot',410,.9,0,'smile')],
+  b:[B('Խորհուրդ՝ փորձիր նաև անգլերենով, շատ գործիքներ այն ավելի լավ են հասկանում։',6,-18,306,100),B('Կրկնիր ու ճշգրտիր՝ մինչև ստացվի։',326,-4,192,410)]}
+]));
+
+/* 4. tools */
+slides.push(comic('Գործիքներ և նկարազարդում',[
+ {c:'r',sc:'monitor',pic:'sun',ch:[C('lil',70,.8,'think','flat'),C('ani',455,.8,'point','smile')],
+  b:[B('Ո՞ր գործիքն ընտրեմ։',6,-12,186,70,'e'),B('Օրինակ՝ Adobe Firefly, Midjourney, DALL·E, Canva։ Ստուգիր գինն ու պայմանները։',206,-20,314,455)]},
+ {c:'t',sc:'school',ch:[C('lil',105,.85,'think','flat'),C('ani',420,.85,'point','smile')],
+  b:[B('Ի՞նչ տեսակի նկարներ կարելի է ստեղծել։',8,-18,250,105),B('Սխեմաներ, պատմական տեսարաններ, գիտական պատկերներ, ինֆոգրաֆիկա։',272,-18,248,420)]},
+ {c:'g',sc:'gallery',ch:[C('robot',150,1,0,'flat'),C('lil',420,.85,'think','flat')],
+  b:[B('Զգույշ, ես կարող եմ սխալվել՝ սխալ մանրամասներ, աղավաղված տառեր։',6,-18,296,150),B('Ուրեմն պետք է ստուգել։',326,-2,190,420,'e')]},
+ {c:'l',sc:'school',ch:[C('ani',105,.85,'cross','smile'),C('lil',420,.85,'point','open')],
+  b:[B('Ամեն նկար ստուգիր վստահելի աղբյուրով։',8,-18,262,105),B('Նախ ստուգում, հետո դասարան։',292,-8,226,420)]}
+]));
+
+/* 5. making a comic */
+const bd=n=>`<div class="bd" style="left:-18px;bottom:-18px">${n}</div>`;
+slides.push(comic('Ինչպես ստեղծել կոմիքս',[
+ {c:'r',sc:'school',ch:[C('ani',105,.85,'point','open'),C('lil',420,.85,'think','smile')],
+  b:[B('Սկսիր սցենարից՝ ի՞նչ միտք ես ուզում փոխանցել։',8,-18,262,105),B('Մեկ կադր՝ մեկ գաղափար։',292,-6,226,420)],x:[bd(1)]},
+ {c:'t',sc:'easel',ch:[C('ani',105,.85,'cross','smile'),C('robot',420,.95,0,'smile')],
+  b:[B('Կերպարին նկարագրիր մեկ անգամ և նույն նկարագրությունը կրկնիր։',8,-18,290,105),B('Առանց դրա դեմքերը կփոխվեն։',310,-4,208,420)],x:[bd(2)]},
+ {c:'g',sc:'monitor',pic:'sun',ch:[C('ani',70,.8,'point','open'),C('lil',455,.8,'cross','smile')],
+  b:[B('Կադրերը ստեղծիր մեկ-մեկ, իսկ ամպիկներն ավելացրու Canva-ում կամ Figma-ում։',6,-18,340,70)],x:[bd(3)]},
+ {c:'l',sc:'phone',ch:[C('lil',105,.85,'think','flat'),C('ani',420,.85,'point','open')],
+  b:[B('Իսկ հայերեն տառե՞րը։',8,-8,196,105,'e'),B('ԱԻ-ն հաճախ աղավաղում է դրանք, տեքստը միշտ գրիր ինքդ։',226,-18,292,420)],x:[bd(4)]}
+]));
+
+/* 6. media message & ethics */
+slides.push(comic('Մեդիա ուղերձ և էթիկա',[
+ {c:'r',sc:'city',ch:[C('lil',105,.85,'point','open'),C('ani',420,.85,'cross','smile')],
+  b:[B('Ուզում եմ կոմիքսով ուղերձ փոխանցել շրջակա միջավայրի մասին։',8,-18,272,105),B('Լավ է՝ կարճ պատմություն և մեկ հստակ միտք։',294,-8,226,420)]},
+ {c:'t',sc:'phone',ch:[C('ani',105,.85,'point','smile'),C('lil',420,.85,'cross','flat')],
+  b:[B('Նշիր, որ պատկերը ստեղծվել է ԱԻ-ով, սա վստահություն է բերում։',8,-18,272,105),B('Թափանցիկությունը կարևոր է։',294,-4,224,420)]},
+ {c:'g',sc:'monitor',pic:'warn',ch:[C('robot',110,.95,0,'flat'),C('ani',420,.85,'cross','flat')],
+  b:[B('Իրական մարդկանց կեղծ պատկերներ մի ստեղծիր, դա խաբեություն է։',8,-18,290,110),B('Դա կարող է վնասել մարդկանց։',312,-4,206,420)]},
+ {c:'l',sc:'gallery',ch:[C('ani',105,.85,'point','smile'),C('lil',420,.85,'cross','smile')],
+  b:[B('Հարգիր հեղինակային իրավունքը և մի պատճենիր կենդանի նկարիչների ոճը։',8,-18,290,105),B('Ստեղծագործություն և պատասխանատվություն միասին։',312,-6,206,420)]}
+]));
+
+/* 7. finale */
+slides.push(comic('Մարդը + ԱԻ = թիմ',[
+ {c:'r',sc:'school',ch:[C('lil',105,.85,'point','open'),C('ani',420,.85,'cross','smile')],
+  b:[B('Երեխաները սիրեցին դասը, պատկերները օգնեցին հասկանալ թեման։',8,-18,274,105),B('Պատկերները ավելի հեշտ են հիշվում։',296,-8,222,420)]},
+ {c:'t',sc:'gallery',ch:[C('lil',70,.76,'cross','smile'),C('ani',262,.88,'point','open'),C('robot',462,.82,0,'smile')],
+  b:[B('Կարևորը ոչ թե գործիքն է, այլ այն, ինչ ուզում ես ասել։',112,-20,300,262)]},
+ {c:'g',sc:'monitor',pic:'sun',ch:[C('lil',70,.8,'point','open'),C('robot',455,.9,0,'smile')],
+  b:[B('Ես արագացնում եմ աշխատանքը, դու տալիս ես իմաստ ու հոգի։',196,-18,316,455)]},
+ {c:'l',sc:'house',ch:[C('lil',100,.85,'cheer','open'),C('robot',262,.9,0,'smile'),C('ani',425,.85,'cheer','open')],
+  b:[B('Սկսենք ստեղծել։',4,-16,234,100,'s'),B('Կազմակերպենք աշխատարան ամբողջ դպրոցի համար։',268,-14,250,425)]}
+]));
+
+/* 8. cheat sheet */
+slides.push(()=>{
+  const items=[
+    ['Սահմանիր նպատակը','Ո՞վ է լսարանը և ի՞նչ միտք ես ուզում փոխանցել։','#c9392c'],
+    ['Գրիր հստակ հուշում','Թեմա, ոճ, տրամադրություն, լույս ու գույն, կոմպոզիցիա։','#0c8f72'],
+    ['Ստեղծիր տարբերակներ','Ստացիր մի քանիսը, ընտրիր լավագույնը և ճշգրտիր։','#d08a1e'],
+    ['Ստուգիր ամեն ինչ','Փաստերը՝ աղբյուրով, հայերեն տեքստը՝ ձեռքով։','#2a8fa0'],
+    ['Ավելացրու մարդկային հպում','Խմբագրիր, միավորիր, հարմարեցրու քո ոճին։','#c9392c'],
+    ['Նշիր և հարգիր','Նշիր ԱԻ-ի օգտագործումը, պահպանիր հեղինակային իրավունքը։','#0c8f72']
+  ];
+  let h=`<div class="ttl">6 քայլ՝ ԱԻ-ով պատկերների համար</div>`;
+  items.forEach((it,i)=>{
+    const x=i%2?655:100, y=205+Math.floor(i/2)*245;
+    h+=`<div class="card step" style="left:${x}px;top:${y}px;width:525px;height:212px"><div class="hd"><u style="background:${it[2]}">${i+1}</u>${it[0]}</div><p>${it[1]}</p></div>`;
+  });
+  return h;
+});
+
+/* 9. idea */
+slides.push(()=>{
+  const cards=[
+    ['r','!','Խնդիր','Կրթական նյութերը հաճախ չոր են, նկարչի կամ դիզայների աշխատանքը՝ թանկ ու երկար, իսկ ԱԻ-ն հաճախ օգտագործվում է առանց կանոնների։'],
+    ['g','✦','Գաղափար','Կոմիքսի ձևաչափով ցույց տալ, թե ինչպես կարելի է ԱԻ-ով ստեղծել կրթական նկարազարդումներ և կոմիքսներ՝ ճիշտ ու պատասխանատու։'],
+    ['t','?','Ինչո՞ւ կոմիքս','Պատկերն ու կարճ տեքստը միասին հեշտ են ընկալվում և հիշվում։ Այս կոմիքսն ինքն է ԱԻ-ի հնարավորությունների օրինակ։'],
+    ['l','★','Արժեք և լսարան','Խնայում է ժամանակ ու ռեսուրսներ, զարգացնում է հմտություններ՝ հուշում գրել, փաստ ստուգել, էթիկա պահպանել։ Ուսուցիչների, ուսանողների, դիզայներների և լրատվամիջոցների համար։']
+  ];
+  let h=`<div class="ttl">Նախագծի գաղափարը</div>`;
+  cards.forEach((c,i)=>{
+    const pos=POS[i];
+    h+=`<div class="card" style="left:${pos.x}px;top:${pos.y}px;width:${pos.w}px;height:${pos.h}px"><div class="hd" style="background:${HEAD[c[0]]}"><u>${c[1]}</u>${c[2]}</div><p>${c[3]}</p></div>`;
+  });
+  return h;
+});
+
+/* 10. speech */
+slides.push(()=>`<div class="ttl">Պաշտպանական խոսք</div>
+  <div class="speech">Բարև ձեզ։ Իմ նախագիծը վերաբերում է արհեստական բանականության և արվեստի համադրությանը։ Այսօր ցանկացած մարդ մի քանի րոպեում կարող է նկար ստեղծել, բայց քչերն են գիտակցում, թե ինչպես դա անել ճիշտ, օգտակար և պատասխանատու։ Այդ պատճառով թեման ներկայացրել եմ կոմիքսի ձևով, որովհետև պատկերն ու պատմությունը միասին ավելի հեշտ են հասկացվում և հիշվում։ Կոմիքսում ցույց եմ տվել հուշում գրելու բանաձևը, հիմնական գործիքները, կոմիքս ստեղծելու քայլերը և էթիկայի կանոնները՝ թափանցիկություն, փաստերի ստուգում և հեղինակային իրավունքի հարգանք։ Իմ գլխավոր միտքն այն է, որ ԱԻ-ն չի փոխարինում արվեստագետին, այլ ընդլայնում է նրա հնարավորությունները։ Գաղափարը, ճաշակը և պատասխանատվությունը միշտ մնում են մարդու մոտ։ Շնորհակալություն ուշադրության համար։</div>
+  <div class="qa" style="left:100px"><h5>Հնարավոր հարց. ԱԻ-ն կզրկի՞ նկարիչներին աշխատանքից։</h5><p>ԱԻ-ն փոխում է գործիքները, բայց գաղափարը, ճաշակը և պատասխանատվությունը մնում են մարդու մոտ։ Լավ մասնագետը ԱԻ-ն կօգտագործի որպես օգնական։</p></div>
+  <div class="qa" style="left:655px"><h5>Հնարավոր հարց. Ինչպե՞ս խուսափել սխալներից։</h5><p>Ստուգել փաստերը, տեքստը գրել ձեռքով, նշել ԱԻ-ի օգտագործումը և հարգել հեղինակային իրավունքը։</p></div>`);
+
+/* ---------- engine ---------- */
+const stage=document.getElementById('stage'), view=document.getElementById('view'), spacer=document.getElementById('spacer');
+const prev=document.getElementById('prev'), next=document.getElementById('next'), cnt=document.getElementById('cnt'), zm=document.getElementById('zm');
+stage.innerHTML=slides.map((f,i)=>`<section class="slide" data-i="${i}" style="background:#eedfa8">${deco(i)}${f()}</section>`).join('');
+const secs=[...stage.querySelectorAll('.slide')];
+let idx=0, zi=0; const ZS=[1,1.7,2.6];
+function layout(){
+  const w=view.clientWidth, h=view.clientHeight;
+  const s=Math.min(w/1280,h/1024)*ZS[zi];
+  spacer.style.width=Math.max(w,1280*s)+'px'; spacer.style.height=Math.max(h,1024*s)+'px';
+  stage.style.transform=`scale(${s})`;
+  stage.style.left=Math.max(0,(w-1280*s)/2)+'px'; stage.style.top=Math.max(0,(h-1024*s)/2)+'px';
+}
+function show(n){
+  idx=Math.max(0,Math.min(secs.length-1,n));
+  secs.forEach((s,i)=>s.classList.toggle('on',i===idx));
+  cnt.textContent=(idx+1)+' / '+secs.length;
+  prev.disabled=idx===0; next.disabled=idx===secs.length-1;
+  view.scrollTo(0,0);
+  try{ sessionStorage.setItem('aiart_i',idx); }catch(e){}
+}
+prev.onclick=()=>show(idx-1); next.onclick=()=>show(idx+1);
+zm.onclick=()=>{ zi=(zi+1)%ZS.length; zm.textContent='🔍 ×'+ZS[zi]; layout(); };
+addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') show(idx+1); if(e.key==='ArrowLeft'||e.key==='PageUp') show(idx-1); });
+addEventListener('resize',layout);
+layout();
+let start=0; try{ start=parseInt(sessionStorage.getItem('aiart_i')||'0',10)||0; }catch(e){}
+show(start);
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layout);
+</script>
+</body>
+</html>
